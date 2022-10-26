@@ -19,8 +19,8 @@ impl serde::Serialize for Error {
     }
 }
 
-#[tauri::command(async)]
-async fn http(method: &str, url: &str) -> Result<String, Error> {
+#[tauri::command]
+async fn rest(method: &str, url: &str) -> Result<String, Error> {
     let client = reqwest::Client::new();
 
     let result = match method {
@@ -28,6 +28,7 @@ async fn http(method: &str, url: &str) -> Result<String, Error> {
         "get" => client.get(url).send().await?.text().await?,
         "put" => client.put(url).send().await?.text().await?,
         "patch" => client.patch(url).send().await?.text().await?,
+        "delete" => client.delete(url).send().await?.text().await?,
         "head" => client.head(url).send().await?.text().await?,
         _ => "Not found".to_owned(),
     };
@@ -37,7 +38,7 @@ async fn http(method: &str, url: &str) -> Result<String, Error> {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![http])
+        .invoke_handler(tauri::generate_handler![rest])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
