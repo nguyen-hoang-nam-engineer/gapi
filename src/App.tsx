@@ -2,8 +2,8 @@ import type { Component } from "solid-js";
 import { invoke } from "@tauri-apps/api";
 
 const App: Component = () => {
-    invoke("greet", { name: "World" }).then((response) =>
-        console.log(response)
+    invoke("http", { method: "post", url: "http://httpbin.org/post" }).then(
+        (response) => console.log(response)
     );
 
     return (
