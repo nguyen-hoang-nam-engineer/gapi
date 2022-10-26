@@ -25,6 +25,10 @@ async fn http(method: &str, url: &str) -> Result<String, Error> {
 
     let result = match method {
         "post" => client.post(url).send().await?.text().await?,
+        "get" => client.get(url).send().await?.text().await?,
+        "put" => client.put(url).send().await?.text().await?,
+        "patch" => client.patch(url).send().await?.text().await?,
+        "head" => client.head(url).send().await?.text().await?,
         _ => "Not found".to_owned(),
     };
 
